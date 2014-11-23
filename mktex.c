@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 unsigned char none_tex[] = {
@@ -121,7 +120,7 @@ int main(int argc, char **argv) {
       continue;
     }
     if (arglen < 4) {
-      printf("%s is not a known flag\n", arg);
+      fprintf(stderr, "%s is not a known flag\n", arg);
       return 1;
     }
     unsigned char negated = arg[0] == 'n' && arg[1] == 'o';
@@ -135,6 +134,10 @@ int main(int argc, char **argv) {
     }
   }
   FILE *stream = fopen(out_file, "w");
+  if (stream == 0) {
+    fprintf(stderr, "Unable to open file %s\n", out_file);
+    return 1;
+  }
   unsigned int selected_tex = math + 2 * head;
   fwrite(texes[selected_tex], sizeof(unsigned char), texes_lens[selected_tex], stream);
   fclose(stream);
